@@ -1,0 +1,51 @@
+{
+  "name": "vue-uwp",
+  "version": "0.0.1",
+  "description": "UWP running with vue.js 3.0",
+  "private": true,
+  "scripts": {
+    "build": "vite build",
+    "pack": "npm run build && node package.mjs"
+  },
+  "keywords": [
+    "Vue",
+    "UWP",
+    "Edge"
+  ],
+  "homepage": "https://github.com/wherewhere/VueForUWP",
+  "bugs": {
+    "url": "https://github.com/wherewhere/VueForUWP/issues"
+  },
+  "license": "MIT",
+  "author": "wherewhere7",
+  "contributors": [
+    "wherewhere"
+  ],
+  "funding": [
+    {
+      "type": "patreon",
+      "url": "https://www.patreon.com/wherewhere"
+    },
+    {
+      "type": "爱发电",
+      "url": "http://afdian.com/@wherewhere"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wherewhere/VueForUWP.git"
+  },
+  "devDependencies": {
+    "@types/winrt-uwp": "^0.0.29",
+    "@vitejs/plugin-legacy": "^7.0.0",
+    "@vitejs/plugin-vue": "^6.0.0",
+    "sass": "^1.0.0",
+    "terser": "^5.0.0",
+    "vite": "^7.0.0",
+    "vite-plugin-simple-html": "^1.0.0"
+  },
+  "dependencies": {
+    "electron-windows-msix": "^2.0.0",
+    "vue": "^3.0.0"
+  }
+}
