@@ -1,0 +1,24 @@
+@mixin row-gap($size) {
+    .row-gap-#{$size} {
+        >*:not(:last-child) {
+            margin-bottom: #{$size}px;
+        }
+    }
+}
+
+@mixin column-gap($size) {
+    .column-gap-#{$size} {
+        >*:not(:last-child) {
+            margin-right: #{$size}px;
+        }
+    }
+}
+
+@mixin gap($size) {
+    .gap-#{$size} {
+        >*:not(:last-child) {
+            margin-bottom: #{$size}px;
+            margin-right: #{$size}px;
+        }
+    }
+}

@@ -9,7 +9,7 @@
 
   <Identity Name="wherewhere.VueForUWP"
     Publisher="CN=where"
-    Version="0.0.0.0" />
+    Version="0.0.1.0" />
 
   <mp:PhoneIdentity PhoneProductId="2d5eb3c5-2697-7f48-4085-ba24fba35ad1"
     PhonePublisherId="00000000-0000-0000-0000-000000000000" />
