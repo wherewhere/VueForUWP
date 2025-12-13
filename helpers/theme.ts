@@ -27,12 +27,8 @@ export function setTheme(newTheme: Theme) {
     }
 }
 
-if (typeof Windows === "undefined") {
-    isPrefersDark = () => matchMedia("(prefers-color-scheme: dark)").matches;
-    onThemeChanged = (isDark: boolean) => dispatchEvent(new CustomEvent<boolean>("theme-changed", { detail: isDark }));
-    matchMedia("(prefers-color-scheme: dark)").addListener(x => onThemeChanged(isDarkTheme(x.matches)));
-}
-else {
+import { isWindows } from "./utils";
+if (isWindows) {
     const settings = new Windows.UI.ViewManagement.UISettings();
 
     function isColorLight(color: Windows.UI.Color) {
@@ -44,8 +40,27 @@ else {
         return !isColorLight(color);
     }
 
-    onThemeChanged = (isDark: boolean) => dispatchEvent(new CustomEvent<boolean>("theme-changed", { detail: isDark }));
+    function updateSystemCaptionButtonColors(isDark: boolean) {
+        const foregroundColor = isDark ? Windows.UI.Colors.white : Windows.UI.Colors.black;
+        const backgroundColor: Windows.UI.Color = isDark ? { r: 23, g: 23, b: 23, a: 255 } : { r: 242, g: 242, b: 242, a: 255 };
+
+        const titleBar = Windows.UI.ViewManagement.ApplicationView.getForCurrentView().titleBar;
+        titleBar.foregroundColor = titleBar.buttonForegroundColor = foregroundColor;
+        titleBar.backgroundColor = titleBar.inactiveBackgroundColor = backgroundColor;
+        titleBar.buttonBackgroundColor = titleBar.buttonInactiveBackgroundColor = backgroundColor;
+    }
+
+    onThemeChanged = (isDark: boolean) => {
+        dispatchEvent(new CustomEvent<boolean>("theme-changed", { detail: isDark }));
+        updateSystemCaptionButtonColors(isDark);
+    };
     settings.addEventListener("colorvalueschanged", () => onThemeChanged(isDarkTheme()));
+    updateSystemCaptionButtonColors(isDarkTheme());
+}
+else {
+    isPrefersDark = () => matchMedia("(prefers-color-scheme: dark)").matches;
+    onThemeChanged = (isDark: boolean) => dispatchEvent(new CustomEvent<boolean>("theme-changed", { detail: isDark }));
+    matchMedia("(prefers-color-scheme: dark)").addListener(x => onThemeChanged(isDarkTheme(x.matches)));
 }
 
 export { isDarkTheme };

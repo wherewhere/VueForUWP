@@ -58,6 +58,14 @@
       <uap:ApplicationContentUriRules>
         <uap:Rule Match="ms-appx-web:///" Type="include" WindowsRuntimeAccess="all" />
       </uap:ApplicationContentUriRules>
+      <Extensions>
+        <uap:Extension Category="windows.protocol">
+          <uap:Protocol Name="vue-uwp">
+            <uap:Logo>Assets\StoreLogo.png</uap:Logo>
+            <uap:DisplayName>VueForUWP</uap:DisplayName>
+          </uap:Protocol>
+        </uap:Extension>
+      </Extensions>
     </Application>
   </Applications>
 

@@ -11,11 +11,25 @@ jobs:
   build:
     runs-on: windows-latest
 
+    env:
+      Project_Directory: ./
+      Signing_Certificate: VueForUWP_TemporaryKey.pfx
+      Timestamp_Server: http://timestamp.digicert.com
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      # Decode the base 64 encoded pfx and save the Signing_Certificate
+      - name: Decode the pfx
+        run: |
+          $pfx_cert_byte = [System.Convert]::FromBase64String($env:Certificate)
+          $certificatePath = Join-Path -Path $env:Project_Directory -ChildPath $env:Signing_Certificate
+          [IO.File]::WriteAllBytes($certificatePath, $pfx_cert_byte)
+        env:
+          Certificate: ${{ secrets.Base64_Encoded_Pfx }}
 
       - name: Use Node.js
         uses: actions/setup-node@v4
@@ -28,7 +42,12 @@ jobs:
         run: npm install
 
       - name: Build
-        run: npm run pack
+        run: npm run pack -- `
+          --certificateFile $env:Signing_Certificate `
+          --certificatePassword $env:Password `
+          --timestampServer $env:Timestamp_Server
+        env:
+          Password: ${{ secrets.Password }}
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4

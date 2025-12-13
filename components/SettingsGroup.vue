@@ -18,7 +18,7 @@ import vCheckSolt from "../directives/checkSolt";
     --body-strong-text-block-font-size: var(--type-ramp-base-font-size);
 
     :deep(div.header-presenter) {
-        margin: 1rem 0 6px 1px;
+        margin: 10px 0 6px 1px;
         font-size: 14px;
         font-weight: bold;
     }
@@ -26,7 +26,11 @@ import vCheckSolt from "../directives/checkSolt";
     :deep(div.items-presenter) {
         display: flex;
         flex-direction: column;
-        row-gap: 0.3rem;
+        align-items: flex-start;
+
+        >*:not(:last-child) {
+            margin-bottom: 10px;
+        }
     }
 }
 </style>

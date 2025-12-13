@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 
 export default createRouter({
-    history: createWebHashHistory(new URL(document.baseURI).pathname),
+    history: createWebHashHistory(),
     routes: [{
         name: "index",
         path: '/',
@@ -11,5 +11,9 @@ export default createRouter({
         name: "settings",
         path: '/settings',
         component: () => import("./views/SettingsView.vue")
+    }, {
+        name: "404",
+        path: "/:pathMatch(.*)*",
+        component: () => import("./views/NotFoundView.vue")
     }]
 });

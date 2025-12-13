@@ -30,7 +30,31 @@ await useScriptAsync(head, {
 });
 
 const app = WinJS.Application;
+import { isWindows } from "./helpers/utils";
+if (isWindows) {
+    app.onactivated = function (args) {
+        const kinds = Windows.ApplicationModel.Activation.ActivationKind;
+        switch (args.detail.kind) {
+            case kinds.protocol:
+            case kinds.protocolForResults:
+                const protocol: Windows.UI.WebUI.WebUIProtocolActivatedEventArgs = args.detail;
+                const uri = protocol.uri;
+                if (uri) {
+                    location.hash = `${uri.host}${uri.path}`;
+                }
+                break;
+        }
+    };
+}
 app.start();
+
+const accents = (WinJS.UI as any)._Accents;
+accents.createAccentRule(
+    ".nav-commands a.router-link-active.router-link-exact-active::before",
+    [{ name: "background", value: accents.ColorTypes.accent }]
+);
+
+import "./helpers/pane";
 
 import { createApp } from "vue";
 import App from "./App.vue";

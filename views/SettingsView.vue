@@ -4,18 +4,34 @@
         <div class="scroll-viewer">
             <SettingsGroup>
                 <template #header>Theme</template>
-                <label class="stack-horizontal">
-                    <input class="win-radio" type="radio" name="theme" value="light" v-model="theme" />
-                    Light
-                </label>
-                <label class="stack-horizontal">
-                    <input class="win-radio" type="radio" name="theme" value="dark" v-model="theme" />
-                    Dark
-                </label>
-                <label class="stack-horizontal">
-                    <input class="win-radio" type="radio" name="theme" value="system" v-model="theme" />
-                    System default
-                </label>
+                <div>
+                    <label class="stack-horizontal">
+                        <input class="win-radio" type="radio" name="theme" value="light" v-model="theme" />
+                        Light
+                    </label>
+                    <label class="stack-horizontal">
+                        <input class="win-radio" type="radio" name="theme" value="dark" v-model="theme" />
+                        Dark
+                    </label>
+                    <label class="stack-horizontal">
+                        <input class="win-radio" type="radio" name="theme" value="system" v-model="theme" />
+                        System default
+                    </label>
+                </div>
+            </SettingsGroup>
+            <SettingsGroup v-if="isWindows">
+                <template #header>Display</template>
+                <div class="stack-horizontal column-gap-4">
+                    <button class="win-button" @click="enterFullWindow">Enter Full Screen</button>
+                    <button class="win-button" @click="exitFullWindow">Exit</button>
+                </div>
+                <div v-if="isApplicationViewViewModeSupported" class="stack-horizontal column-gap-4">
+                    <button class="win-button" @click="enterPIP">Enter PIP Mode</button>
+                    <button class="win-button" @click="exitPIP">Exit</button>
+                </div>
+                <button v-if="isSettingsPaneSupported" class="win-button" @click="settingsFlyout">
+                    Open Charm Settings
+                </button>
             </SettingsGroup>
             <SettingsGroup>
                 <template #header>Device</template>
@@ -39,6 +55,9 @@
             <SettingsGroup>
                 <template #header>About</template>
                 {{ version }}
+                <a class="win-link" :href="bugs.url" target="_blank" rel="noopener noreferrer">
+                    Feedback on GitHub
+                </a>
             </SettingsGroup>
         </div>
     </div>
@@ -47,7 +66,8 @@
 <script lang="ts" setup>
 import { shallowRef, watch } from "vue";
 import { getTheme, setTheme, type Theme } from "../helpers/theme";
-import { name, version as code } from "../package.json";
+import { name, version as code, bugs } from "../package.json";
+import { isWindows, isSettingsPaneSupported, isApplicationViewViewModeSupported } from "../helpers/utils";
 import SettingsGroup from "../components/SettingsGroup.vue";
 
 const theme = shallowRef<Theme>(getTheme());
@@ -61,14 +81,51 @@ const device = shallowRef("Browser");
 const osVersion = shallowRef("Unknown");
 const userAgent = navigator.userAgent;
 const version = shallowRef(`${name} v${code}`);
-if (typeof Windows !== "undefined") {
+if (isWindows) {
     const versionInfo = Windows.System.Profile.AnalyticsInfo.versionInfo;
     device.value = versionInfo.deviceFamily.replace('.', ' ');
     const deviceFamilyVersion = +versionInfo.deviceFamilyVersion;
     osVersion.value = `10.${deviceFamilyVersion & 0x0000FFFF00000000}.${(deviceFamilyVersion & 0x00000000FFFF0000) >> 16}.${deviceFamilyVersion & 0x000000000000FFFF}`;
     const _package = Windows.ApplicationModel.Package.current;
     version.value = `${_package.displayName} v${_package.id.version.major}.${_package.id.version.minor}.${_package.id.version.build}`;
+}
 
+function exitPIP() {
+    if (isApplicationViewViewModeSupported) {
+        const viewManagement: any = Windows.UI.ViewManagement;
+        const view = viewManagement.ApplicationView.getForCurrentView();
+        if (view.isViewModeSupported(viewManagement.ApplicationViewMode.default)) {
+            view.tryEnterViewModeAsync(viewManagement.ApplicationViewMode.default);
+        }
+    }
+}
+
+function enterPIP() {
+    if (isApplicationViewViewModeSupported) {
+        const viewManagement: any = Windows.UI.ViewManagement;
+        const view = viewManagement.ApplicationView.getForCurrentView();
+        if (view.isViewModeSupported(viewManagement.ApplicationViewMode.compactOverlay)) {
+            view.tryEnterViewModeAsync(viewManagement.ApplicationViewMode.compactOverlay);
+        }
+    }
+}
+
+function exitFullWindow() {
+    if (isWindows) {
+        Windows.UI.ViewManagement.ApplicationView.getForCurrentView().exitFullScreenMode();
+    }
+}
+
+function settingsFlyout() {
+    if (isSettingsPaneSupported) {
+        Windows.UI.ApplicationSettings.SettingsPane.show();
+    }
+}
+
+function enterFullWindow() {
+    if (isWindows) {
+        Windows.UI.ViewManagement.ApplicationView.getForCurrentView().tryEnterFullScreenMode();
+    }
 }
 </script>
 
@@ -95,4 +152,5 @@ if (typeof Windows !== "undefined") {
 }
 
 @include utils.row-gap(24);
+@include utils.column-gap(4);
 </style>
