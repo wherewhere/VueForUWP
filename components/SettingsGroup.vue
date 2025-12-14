@@ -19,8 +19,8 @@ import vCheckSolt from "../directives/checkSolt";
 
     :deep(div.header-presenter) {
         margin: 10px 0 6px 1px;
-        font-size: 14px;
-        font-weight: bold;
+        font-size: 20px;
+        font-weight: normal;
     }
 
     :deep(div.items-presenter) {

@@ -64,8 +64,8 @@
                         <select class="win-dropdown" placeholder="Placeholder text" disabled></select>
                         <button class="win-button" ref="button" @click="openFlyout">Button with flyout</button>
                         <WinJSControl :control="Flyout" :options="{ anchor: button! }" ref="flyout">
-                            <div>
-                                <span class="win-type-base" style="margin-bottom: 12px;">
+                            <div class="stack-vertical row-gap-12">
+                                <span class="win-type-base">
                                     All items will be removed. Do you want to continue?
                                 </span>
                                 <button class="win-button">Yes, empty my cart</button>
@@ -146,6 +146,7 @@ function openFlyout() {
 @include utils.row-gap(17);
 @include utils.row-gap(15);
 @include utils.row-gap(14);
+@include utils.row-gap(12);
 @include utils.row-gap(11);
 @include utils.row-gap(8);
 @include utils.column-gap(8);

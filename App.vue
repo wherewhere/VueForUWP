@@ -4,7 +4,7 @@
             <div class="header">
                 <WinJSControl tag="button" :control="SplitViewPaneToggle"
                     :options="{ splitView: splitView?.control?.element }" />
-                <div class="title">
+                <div v-if="!isWindows" class="title">
                     <h3 class="win-splitviewcommand-label">VueForUWP</h3>
                 </div>
             </div>
@@ -25,7 +25,7 @@
             <div v-if="isCompactOverlay" class="header">
                 <WinJSControl tag="button" :control="SplitViewPaneToggle"
                     :options="{ splitView: splitView?.control?.element }" />
-                <div class="title">
+                <div v-if="!isWindows" class="title">
                     <h3 class="win-splitviewcommand-label">VueForUWP</h3>
                 </div>
             </div>
@@ -48,6 +48,35 @@ import { isWindows, isUserActivityChannelSupported } from "./helpers/utils";
 import WinJSControl from "./components/WinJSControl.vue";
 const { SplitView, SplitViewCommand, SplitViewPaneToggle } = WinJS.UI;
 
+const paneOpened = shallowRef(window.innerWidth >= 1008);
+const isCompactOverlay = shallowRef(window.innerWidth < 641);
+const isExpandedMode = shallowRef(window.innerWidth >= 1008);
+const splitView = useTemplateRef("splitview");
+function handleResize() {
+    const control = splitView.value!.control!;
+    if (window.innerWidth >= 1008) {
+        control.openedDisplayMode = WinJS.UI.SplitView.OpenedDisplayMode.inline;
+        control.closedDisplayMode = WinJS.UI.SplitView.ClosedDisplayMode.inline;
+        isCompactOverlay.value = false;
+        isExpandedMode.value = true;
+        paneOpened.value = true;
+    }
+    else if (window.innerWidth >= 641) {
+        control.openedDisplayMode = WinJS.UI.SplitView.OpenedDisplayMode.overlay;
+        control.closedDisplayMode = WinJS.UI.SplitView.ClosedDisplayMode.inline;
+        isCompactOverlay.value = false;
+        isExpandedMode.value = false;
+        paneOpened.value = false;
+    }
+    else {
+        control.openedDisplayMode = WinJS.UI.SplitView.OpenedDisplayMode.overlay;
+        control.closedDisplayMode = WinJS.UI.SplitView.ClosedDisplayMode.none;
+        isCompactOverlay.value = true;
+        isExpandedMode.value = false;
+        paneOpened.value = false;
+    }
+}
+
 const router = useRouter();
 router.afterEach((to, from) => {
     function getPathDepth(path: string) {
@@ -56,32 +85,10 @@ router.afterEach((to, from) => {
     const toDepth = getPathDepth(to.path);
     const fromDepth = getPathDepth(from.path);
     to.meta.transition = toDepth < fromDepth ? "drill-out" : "drill-in";
+    if (!isExpandedMode.value) {
+        splitView.value!.control!.closePane();
+    }
 });
-
-const paneOpened = shallowRef(window.innerWidth >= 1008);
-const isCompactOverlay = shallowRef(false);
-const splitView = useTemplateRef("splitview");
-function handleResize() {
-    const control = splitView.value!.control!;
-    if (window.innerWidth >= 1008) {
-        control.openedDisplayMode = WinJS.UI.SplitView.OpenedDisplayMode.inline;
-        control.closedDisplayMode = WinJS.UI.SplitView.ClosedDisplayMode.inline;
-        isCompactOverlay.value = false;
-        paneOpened.value = true;
-    }
-    else if (window.innerWidth >= 641) {
-        control.openedDisplayMode = WinJS.UI.SplitView.OpenedDisplayMode.overlay;
-        control.closedDisplayMode = WinJS.UI.SplitView.ClosedDisplayMode.inline;
-        isCompactOverlay.value = false;
-        paneOpened.value = false;
-    }
-    else {
-        control.openedDisplayMode = WinJS.UI.SplitView.OpenedDisplayMode.overlay;
-        control.closedDisplayMode = WinJS.UI.SplitView.ClosedDisplayMode.none;
-        isCompactOverlay.value = true;
-        paneOpened.value = false;
-    }
-}
 
 if (isWindows) {
     const manager = Windows.UI.Core.SystemNavigationManager.getForCurrentView();
@@ -110,7 +117,11 @@ onUnmounted(() => window.removeEventListener("resize", handleResize));
 </script>
 
 <style lang="scss">
-:root {
+.win-ui-light {
+    color-scheme: light;
+}
+
+.win-ui-dark {
     color-scheme: dark;
 }
 
@@ -182,11 +193,15 @@ body {
                 &::before {
                     content: '';
                     position: absolute;
-                    width: 2px;
+                    width: 4px;
                     display: block;
                     height: 24px;
-                    left: 4px;
-                    top: 10px;
+                    left: 0;
+                    top: 12px;
+                }
+
+                :deep(.win-splitviewcommand-icon) {
+                    margin-top: 16px;
                 }
             }
         }

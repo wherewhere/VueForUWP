@@ -21,17 +21,19 @@
             </SettingsGroup>
             <SettingsGroup v-if="isWindows">
                 <template #header>Display</template>
-                <div class="stack-horizontal column-gap-4">
-                    <button class="win-button" @click="enterFullWindow">Enter Full Screen</button>
-                    <button class="win-button" @click="exitFullWindow">Exit</button>
+                <div class="stack-vertical row-gap-4">
+                    <div class="stack-horizontal column-gap-4">
+                        <button class="win-button" @click="enterFullWindow">Enter Full Screen</button>
+                        <button class="win-button" @click="exitFullWindow">Exit</button>
+                    </div>
+                    <div v-if="isApplicationViewViewModeSupported" class="stack-horizontal column-gap-4">
+                        <button class="win-button" @click="enterPIP">Enter PIP Mode</button>
+                        <button class="win-button" @click="exitPIP">Exit</button>
+                    </div>
+                    <button v-if="isSettingsPaneSupported" class="win-button" @click="settingsFlyout">
+                        Open Charm Settings
+                    </button>
                 </div>
-                <div v-if="isApplicationViewViewModeSupported" class="stack-horizontal column-gap-4">
-                    <button class="win-button" @click="enterPIP">Enter PIP Mode</button>
-                    <button class="win-button" @click="exitPIP">Exit</button>
-                </div>
-                <button v-if="isSettingsPaneSupported" class="win-button" @click="settingsFlyout">
-                    Open Charm Settings
-                </button>
             </SettingsGroup>
             <SettingsGroup>
                 <template #header>Device</template>
@@ -53,22 +55,31 @@
                 </table>
             </SettingsGroup>
             <SettingsGroup>
-                <template #header>About</template>
-                {{ version }}
+                <template #header>Others</template>
                 <a class="win-link" :href="bugs.url" target="_blank" rel="noopener noreferrer">
                     Feedback on GitHub
                 </a>
+            </SettingsGroup>
+            <SettingsGroup>
+                <template #header>About</template>
+                {{ version }}
+                <Markdown>
+                    <About />
+                </Markdown>
             </SettingsGroup>
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
+import "../types";
 import { shallowRef, watch } from "vue";
 import { getTheme, setTheme, type Theme } from "../helpers/theme";
 import { name, version as code, bugs } from "../package.json";
 import { isWindows, isSettingsPaneSupported, isApplicationViewViewModeSupported } from "../helpers/utils";
 import SettingsGroup from "../components/SettingsGroup.vue";
+import Markdown from "../components/Markdown.vue";
+import About from "../About.md"
 
 const theme = shallowRef<Theme>(getTheme());
 watch(theme, (newValue, oldValue) => {
@@ -132,6 +143,15 @@ function enterFullWindow() {
 <style lang="scss" scoped>
 @use "../styles/utils";
 
+table {
+    font-size: inherit;
+
+    td,
+    th {
+        padding: 2px 4.5px;
+    }
+}
+
 .root {
     flex: 1;
     display: flex;
@@ -152,5 +172,6 @@ function enterFullWindow() {
 }
 
 @include utils.row-gap(24);
+@include utils.row-gap(4);
 @include utils.column-gap(4);
 </style>

@@ -1,7 +1,7 @@
 import "../types";
 
 export type Theme = "light" | "dark" | "system";
-let theme: Theme = "system";
+let theme: Theme = localStorage.getItem("theme") as Theme ?? "system";
 let onThemeChanged: (isDark: boolean) => void;
 
 let isPrefersDark: () => boolean;
@@ -24,6 +24,7 @@ export function setTheme(newTheme: Theme) {
     if (theme !== newTheme) {
         theme = newTheme;
         onThemeChanged(isDarkTheme());
+        localStorage.setItem("theme", theme);
     }
 }
 

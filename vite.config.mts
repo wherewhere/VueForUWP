@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
+import markdown from "unplugin-vue-markdown/vite";
 import simpleHtmlPlugin from "vite-plugin-simple-html";
 import legacy from "@vitejs/plugin-legacy";
 import postcssPresetEnv from "postcss-preset-env";
@@ -8,12 +9,14 @@ export default defineConfig({
     base: "./",
     plugins: [
         vue({
+            include: [/\.vue$/, /\.md$/],
             template: {
                 compilerOptions: {
                     isCustomElement: tag => tag.includes('-')
                 }
             }
         }),
+        markdown({}),
         simpleHtmlPlugin({
             minify: {
                 minifyJs: true,
