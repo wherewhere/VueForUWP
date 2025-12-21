@@ -44,6 +44,14 @@
                             <td>{{ device }}</td>
                         </tr>
                         <tr>
+                            <td>Vue JS</td>
+                            <td>{{ vueVersion }}</td>
+                        </tr>
+                        <tr>
+                            <td>Windows JS</td>
+                            <td>{{ winjsVersion }}</td>
+                        </tr>
+                        <tr>
                             <td>OS Version</td>
                             <td>{{ osVersion }}</td>
                         </tr>
@@ -74,12 +82,26 @@
 <script lang="ts" setup>
 import "../types";
 import { shallowRef, watch } from "vue";
+import { useSeoMeta } from "@unhead/vue";
 import { getTheme, setTheme, type Theme } from "../helpers/theme";
 import { name, version as code, bugs } from "../package.json";
+import { version as winjsVersion } from "winjs/package.json";
+import { version as vueVersion } from "vue/package.json";
 import { isWindows, isSettingsPaneSupported, isApplicationViewViewModeSupported } from "../helpers/utils";
 import SettingsGroup from "../components/SettingsGroup.vue";
 import Markdown from "../components/Markdown.vue";
-import About from "../About.md"
+import About from "../About.md";
+
+const site = "VueForUWP";
+const title = "Settings";
+useSeoMeta({
+    // Basic SEO
+    title: `${title} | ${site}`,
+
+    // Open Graph
+    ogTitle: title,
+    ogSiteName: site
+});
 
 const theme = shallowRef<Theme>(getTheme());
 watch(theme, (newValue, oldValue) => {

@@ -5,7 +5,7 @@
                 <WinJSControl tag="button" :control="SplitViewPaneToggle"
                     :options="{ splitView: splitView?.control?.element }" />
                 <div v-if="!isWindows" class="title">
-                    <h3 class="win-splitviewcommand-label">VueForUWP</h3>
+                    <h3 class="win-splitviewcommand-label">{{ title }}</h3>
                 </div>
             </div>
             <div class="nav-commands">
@@ -43,10 +43,67 @@
 <script lang="ts" setup>
 import "./types";
 import { onMounted, onUnmounted, shallowRef, useTemplateRef } from "vue";
+import { useHead, useSeoMeta } from "@unhead/vue";
 import { useRouter } from "vue-router";
 import { isWindows, isUserActivityChannelSupported } from "./helpers/utils";
+import { description, keywords } from "./package.json";
 import WinJSControl from "./components/WinJSControl.vue";
 const { SplitView, SplitViewCommand, SplitViewPaneToggle } = WinJS.UI;
+
+const assetsUrl = isWindows ? "../assets" : "https://cdn.jsdelivr.net/gh/wherewhere/VueForUWP@main/assets";
+useHead({
+    link: [{
+        href: `${assetsUrl}/StoreLogo.scale-100.png`,
+        rel: "icon",
+        sizes: "50x50",
+        type: "image/png"
+    }, {
+        href: `${assetsUrl}/StoreLogo.scale-125.png`,
+        rel: "icon",
+        sizes: "63x63",
+        type: "image/png"
+    }, {
+        href: `${assetsUrl}/StoreLogo.scale-150.png`,
+        rel: "icon",
+        sizes: "75x75",
+        type: "image/png"
+    }, {
+        href: `${assetsUrl}/StoreLogo.scale-200.png`,
+        rel: "icon",
+        sizes: "100x100",
+        type: "image/png"
+    }, {
+        href: `${assetsUrl}/StoreLogo.scale-400.png`,
+        rel: "icon",
+        sizes: "200x200",
+        type: "image/png"
+    }]
+});
+
+const title = "VueForUWP";
+const author = "wherewhere";
+useSeoMeta({
+    // Basic SEO
+    title,
+    description,
+    author: author,
+    keywords: keywords.join(", "),
+
+    // Open Graph
+    ogTitle: title,
+    ogDescription: description,
+    ogType: "website",
+    ogLocale: "en_US",
+    ogSiteName: title,
+
+    // Twitter
+    twitterCard: "summary",
+    twitterSite: "@wherewhere7",
+
+    // Product specific (structured data will be generated)
+    articleAuthor: [author],
+    articleTag: keywords
+});
 
 const paneOpened = shallowRef(window.innerWidth >= 1008);
 const isCompactOverlay = shallowRef(window.innerWidth < 641);
@@ -92,11 +149,15 @@ router.afterEach((to, from) => {
 
 if (isWindows) {
     const manager = Windows.UI.Core.SystemNavigationManager.getForCurrentView();
-    manager.appViewBackButtonVisibility = Windows.UI.Core.AppViewBackButtonVisibility.visible;
-    manager.addEventListener("backrequested", router.back);
+    function setBackVisibility() {
+        manager.appViewBackButtonVisibility = router.options.history.state.back ? Windows.UI.Core.AppViewBackButtonVisibility.visible : Windows.UI.Core.AppViewBackButtonVisibility.collapsed;
+    }
+    setBackVisibility();
+    WinJS.Application.onbackclick = router.back;
     if (isUserActivityChannelSupported) {
         let _currentActivity: any;
         router.afterEach(async to => {
+            setBackVisibility();
             const channel = (Windows.ApplicationModel as any).UserActivities.UserActivityChannel.getDefault();
             const url = `vue-uwp://${to.path}`;
             const userActivity = await channel.getOrCreateUserActivityAsync(url);

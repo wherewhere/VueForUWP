@@ -26,7 +26,7 @@ export default defineConfig({
             }
         }),
         legacy({
-            targets: "Edge >= 13",
+            targets: "Edge >= 18",
             polyfills: true,
             renderModernChunks: false
         })
@@ -36,7 +36,7 @@ export default defineConfig({
             plugins: [
                 postcssPresetEnv({
                     stage: 0,
-                    browsers: "Edge >= 13"
+                    browsers: "Edge >= 18"
                 })
             ]
         },

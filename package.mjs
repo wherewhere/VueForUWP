@@ -22,7 +22,7 @@ const {msixPackage} = await packageMSIX({
     appDir: "dist",
     packageAssets: "assets",
     outputDir: "appx",
-    packageName: "VueForUWP.appx",
+    packageName: "VueForUWP.msix",
     windowsKitVersion: "10.0.26100.0",
     windowsSignOptions,
     sign: !!windowsSignOptions
