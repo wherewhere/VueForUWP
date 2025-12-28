@@ -135,13 +135,11 @@ function handleResize() {
 }
 
 const router = useRouter();
-router.afterEach((to, from) => {
-    function getPathDepth(path: string) {
-        return path === '/' ? 0 : path.split('/').length;
-    }
-    const toDepth = getPathDepth(to.path);
-    const fromDepth = getPathDepth(from.path);
-    to.meta.transition = toDepth < fromDepth ? "drill-out" : "drill-in";
+let position = router.options.history.state.position as number;
+router.afterEach(to => {
+    const toDepth = router.options.history.state.position as number;
+    to.meta.transition = toDepth < position ? "drill-out" : "drill-in";
+    position = toDepth;
     if (!isExpandedMode.value) {
         splitView.value!.control!.closePane();
     }
