@@ -176,6 +176,8 @@ onUnmounted(() => window.removeEventListener("resize", handleResize));
 </script>
 
 <style lang="scss">
+@use "winjs/css/ui-dark.css";
+
 .win-ui-light {
     color-scheme: light;
 }

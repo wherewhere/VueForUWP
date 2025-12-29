@@ -2,7 +2,7 @@
     <div class="row-gap-24 root">
         <span class="win-type-title">Overview</span>
         <div class="scroll-viewer">
-            <div class="stack-vertical row-gap-40">
+            <div class="masonry row-gap-40">
                 <div class="stack-vertical row-gap-20">
                     <span class="win-type-base">Buttons</span>
                     <div class="stack-horizontal column-gap-8">
@@ -62,15 +62,19 @@
                             <option>List item</option>
                         </select>
                         <select class="win-dropdown" placeholder="Placeholder text" disabled></select>
-                        <button class="win-button" ref="button" @click="openFlyout">Button with flyout</button>
-                        <WinJSControl :control="Flyout" :options="{ anchor: button! }" ref="flyout">
-                            <div class="stack-vertical row-gap-12">
-                                <span class="win-type-base">
-                                    All items will be removed. Do you want to continue?
-                                </span>
-                                <button class="win-button">Yes, empty my cart</button>
-                            </div>
-                        </WinJSControl>
+                        <div>
+                            <button class="win-button" ref="button" @click="openFlyout">Button with flyout</button>
+                            <WinJSControl :control="Flyout" :options="{ anchor: button! }" ref="flyout">
+                                <div class="stack-vertical row-gap-12">
+                                    <span class="win-type-base">
+                                        All items will be removed. Do you want to continue?
+                                    </span>
+                                    <div>
+                                        <button class="win-button">Yes, empty my cart</button>
+                                    </div>
+                                </div>
+                            </WinJSControl>
+                        </div>
                     </div>
                 </div>
                 <div class="stack-vertical row-gap-11">
@@ -84,9 +88,10 @@
                     <span class="win-type-base">Toggle switch</span>
                     <div class="gap-12" style="display: grid; grid-template-columns: auto auto;">
                         <WinJSControl :control="ToggleSwitch" />
+                        <WinJSControl :control="ToggleSwitch" :options="{ disabled: true, labelOff: 'Disabled Off' }" />
                         <WinJSControl :control="ToggleSwitch" :options="{ checked: true }" />
-                        <WinJSControl :control="ToggleSwitch" :options="{ disabled: true }" />
-                        <WinJSControl :control="ToggleSwitch" :options="{ checked: true, disabled: true }" />
+                        <WinJSControl :control="ToggleSwitch"
+                            :options="{ checked: true, disabled: true, labelOn: 'Disabled On' }" />
                     </div>
                 </div>
                 <div class="stack-vertical row-gap-14">
@@ -128,11 +133,35 @@ function openFlyout() {
         overflow: auto;
         flex-direction: column;
         padding: 0 20px 48px 0;
+
+        .masonry {
+            @include utils.masonry(296px, 40px);
+        }
     }
 }
 
-.stack-vertical {
-    align-items: flex-start;
+:deep(.win-datepicker) {
+
+    .win-datepicker-date.win-order0,
+    .win-datepicker-date.win-order1,
+    .win-datepicker-month,
+    .win-datepicker-year.win-order0 {
+        margin-right: 8px;
+    }
+}
+
+:deep(.win-timepicker) {
+
+    .win-timepicker-hour,
+    .win-timepicker-minute.win-order1,
+    .win-timepicker-period.win-order0 {
+        margin-right: 8px;
+    }
+}
+
+.win-textbox,
+.win-slider {
+    width: auto;
 }
 
 .stack-horizontal {

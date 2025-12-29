@@ -2,87 +2,91 @@
     <div class="row-gap-24 root">
         <span class="win-type-title">Settings</span>
         <div class="scroll-viewer">
-            <SettingsGroup>
-                <template #header>Theme</template>
-                <div>
-                    <label class="stack-horizontal">
-                        <input class="win-radio" type="radio" name="theme" value="light" v-model="theme" />
-                        Light
-                    </label>
-                    <label class="stack-horizontal">
-                        <input class="win-radio" type="radio" name="theme" value="dark" v-model="theme" />
-                        Dark
-                    </label>
-                    <label class="stack-horizontal">
-                        <input class="win-radio" type="radio" name="theme" value="system" v-model="theme" />
-                        System default
-                    </label>
-                </div>
-            </SettingsGroup>
-            <SettingsGroup v-if="isWindows">
-                <template #header>Display</template>
-                <div class="stack-vertical row-gap-4">
-                    <div class="stack-horizontal column-gap-4">
-                        <button class="win-button" @click="enterFullWindow">Enter Full Screen</button>
-                        <button class="win-button" @click="exitFullWindow">Exit</button>
+            <div class="masonry">
+                <SettingsGroup>
+                    <template #header>Theme</template>
+                    <div>
+                        <label class="stack-horizontal">
+                            <input class="win-radio" type="radio" name="theme" value="light" v-model="theme" />
+                            Light
+                        </label>
+                        <label class="stack-horizontal">
+                            <input class="win-radio" type="radio" name="theme" value="dark" v-model="theme" />
+                            Dark
+                        </label>
+                        <label class="stack-horizontal">
+                            <input class="win-radio" type="radio" name="theme" value="system" v-model="theme" />
+                            System default
+                        </label>
                     </div>
-                    <div v-if="isApplicationViewViewModeSupported" class="stack-horizontal column-gap-4">
-                        <button class="win-button" @click="enterPIP">Enter PIP Mode</button>
-                        <button class="win-button" @click="exitPIP">Exit</button>
+                </SettingsGroup>
+                <SettingsGroup v-if="isWindows">
+                    <template #header>Display</template>
+                    <div class="stack-vertical row-gap-4">
+                        <div class="stack-horizontal column-gap-4">
+                            <button class="win-button" @click="enterFullWindow">Enter Full Screen</button>
+                            <button class="win-button" @click="exitFullWindow">Exit</button>
+                        </div>
+                        <div v-if="isApplicationViewViewModeSupported" class="stack-horizontal column-gap-4">
+                            <button class="win-button" @click="enterPIP">Enter PIP Mode</button>
+                            <button class="win-button" @click="exitPIP">Exit</button>
+                        </div>
+                        <div v-if="isSettingsPaneSupported">
+                            <button class="win-button" @click="settingsFlyout">
+                                Open Charm Settings
+                            </button>
+                        </div>
                     </div>
-                    <button v-if="isSettingsPaneSupported" class="win-button" @click="settingsFlyout">
-                        Open Charm Settings
-                    </button>
-                </div>
-            </SettingsGroup>
-            <SettingsGroup>
-                <template #header>Device</template>
-                <table>
-                    <tbody>
-                        <tr>
-                            <td>Device Family</td>
-                            <td>{{ device }}</td>
-                        </tr>
-                        <tr>
-                            <td>Vue JS</td>
-                            <td>{{ vueVersion }}</td>
-                        </tr>
-                        <tr>
-                            <td>Windows JS</td>
-                            <td>{{ winjsVersion }}</td>
-                        </tr>
-                        <tr>
-                            <td>Browser</td>
-                            <td>{{ getName(browser) }}</td>
-                        </tr>
-                        <tr>
-                            <td>Engine</td>
-                            <td>{{ getName(engine) }}</td>
-                        </tr>
-                        <tr>
-                            <td>OS Version</td>
-                            <td>{{ osVersion }}</td>
-                        </tr>
-                        <tr>
-                            <td>User Agent</td>
-                            <td>{{ userAgent }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </SettingsGroup>
-            <SettingsGroup>
-                <template #header>Others</template>
-                <a class="win-link" :href="bugs.url" target="_blank" rel="noopener noreferrer">
-                    Feedback on GitHub
-                </a>
-            </SettingsGroup>
-            <SettingsGroup>
-                <template #header>About</template>
-                {{ version }}
-                <Markdown>
-                    <About />
-                </Markdown>
-            </SettingsGroup>
+                </SettingsGroup>
+                <SettingsGroup>
+                    <template #header>Device</template>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td width="90px">Device Family</td>
+                                <td>{{ device }}</td>
+                            </tr>
+                            <tr>
+                                <td>Vue JS</td>
+                                <td>{{ vueVersion }}</td>
+                            </tr>
+                            <tr>
+                                <td>Windows JS</td>
+                                <td>{{ winjsVersion }}</td>
+                            </tr>
+                            <tr>
+                                <td>Browser</td>
+                                <td>{{ getName(browser) }}</td>
+                            </tr>
+                            <tr>
+                                <td>Engine</td>
+                                <td>{{ getName(engine) }}</td>
+                            </tr>
+                            <tr>
+                                <td>OS Version</td>
+                                <td>{{ osVersion }}</td>
+                            </tr>
+                            <tr>
+                                <td>User Agent</td>
+                                <td>{{ userAgent }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </SettingsGroup>
+                <SettingsGroup>
+                    <template #header>Others</template>
+                    <a class="win-link" :href="bugs.url" target="_blank" rel="noopener noreferrer">
+                        Feedback on GitHub
+                    </a>
+                </SettingsGroup>
+                <SettingsGroup>
+                    <template #header>About</template>
+                    {{ version }}
+                    <Markdown>
+                        <About />
+                    </Markdown>
+                </SettingsGroup>
+            </div>
         </div>
     </div>
 </template>
@@ -214,6 +218,10 @@ table {
         overflow: auto;
         flex-direction: column;
         padding: 0 20px 48px 0;
+
+        .masonry {
+            @include utils.masonry(420px);
+        }
     }
 }
 

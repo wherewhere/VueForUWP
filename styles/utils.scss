@@ -22,3 +22,18 @@
         }
     }
 }
+
+@mixin masonry($column-width, $column-gap: 0) {
+    display: block;
+    columns: #{$column-width};
+
+    @if $column-gap !=0 {
+        column-gap: #{$column-gap};
+    }
+
+    @supports (display: masonry) or (display: grid-lanes) {
+        display: masonry;
+        display: grid-lanes;
+        grid-template-columns: repeat(auto-fill, minmax(#{$column-width}, 1fr));
+    }
+}

@@ -3,31 +3,15 @@ import "./types";
 import { createHead } from "@unhead/vue/client";
 const head = createHead();
 
-import { useHead } from "unhead";
 import { isDarkTheme } from "./helpers/theme";
-import uiDarkUrl from "winjs/css/ui-dark.min.css?url";
-import uiLightUrl from "winjs/css/ui-light.min.css?url";
-import darkCss from "./styles/dark.css?inline";
-import lightCss from "./styles/light.css?inline";
 function setThemeStyleSheet(isDark: boolean) {
-    useHead(head, {
-        link: [{
-            id: "winjs-theme-style-sheet",
-            href: isDark ? uiDarkUrl : uiLightUrl,
-            rel: "stylesheet"
-        }],
-        style: [{
-            id: "color-scheme-style",
-            textContent: isDark ? darkCss : lightCss
-        }]
-    });
     if (isDark) {
-        document.documentElement.classList.add("win-ui-dark");
-        document.documentElement.classList.remove("win-ui-light");
+        document.body.classList.add("win-ui-dark");
+        document.body.classList.remove("win-ui-light");
     }
     else {
-        document.documentElement.classList.remove("win-ui-dark");
-        document.documentElement.classList.add("win-ui-light");
+        document.body.classList.remove("win-ui-dark");
+        document.body.classList.add("win-ui-light");
     }
 }
 addEventListener("theme-changed", x => setThemeStyleSheet((x as CustomEvent<boolean>).detail));

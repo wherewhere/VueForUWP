@@ -3,6 +3,7 @@ import vue from "@vitejs/plugin-vue";
 import markdown from "unplugin-vue-markdown/vite";
 import simpleHtmlPlugin from "vite-plugin-simple-html";
 import legacy from "@vitejs/plugin-legacy";
+import cssnano from "cssnano";
 import postcssPresetEnv from "postcss-preset-env";
 
 export default defineConfig({
@@ -34,6 +35,9 @@ export default defineConfig({
     css: {
         postcss: {
             plugins: [
+                cssnano({
+                    preset: "advanced"
+                }),
                 postcssPresetEnv({
                     stage: 0,
                     browsers: "Edge >= 18"
