@@ -9,3 +9,7 @@ declare module "*.md" {
   const component: ReturnType<typeof defineComponent<HTMLAttributes, ComponentObjectPropsOptions, string, {}, {}, string, { excerpt?: string, frontmatter?: typeof frontmatter }>>;
   export default component;
 }
+
+declare module "@microsoft/clarity/src/utils" {
+    export function injectScript(projectId: string): void;
+}

@@ -50,7 +50,7 @@ jobs:
           Password: ${{ secrets.Password }}
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: MSIX Package
           path: appx/*.*
@@ -61,7 +61,7 @@ jobs:
           path: dist
 
   deploy:
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     needs: build
 
     permissions:

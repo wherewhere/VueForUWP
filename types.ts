@@ -1,4 +1,4 @@
-/// <reference types="./vite.env" />
+/// <reference types="./env" />
 
 export interface IWinJSControl {
     /**

@@ -42,9 +42,10 @@
 
 <script lang="ts" setup>
 import "./types";
-import { onMounted, onUnmounted, shallowRef, useTemplateRef } from "vue";
+import { onMounted, onUnmounted, shallowRef, useTemplateRef, watch } from "vue";
 import { useHead, useSeoMeta } from "@unhead/vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import { useAnalytics } from "./helpers/analytics";
 import { isWindows, isUserActivityChannelSupported } from "./helpers/utils";
 import { description, keywords } from "./package.json";
 import WinJSControl from "./components/WinJSControl.vue";
@@ -104,6 +105,24 @@ useSeoMeta({
     articleAuthor: [author],
     articleTag: keywords
 });
+useAnalytics(isWindows);
+
+if (!isWindows) {
+    const route = useRoute();
+    watch(
+        () => route.path,
+        (newValue, oldValue) => {
+            if (newValue !== oldValue) {
+                window.gtag?.call(this, "event", "page_view", {
+                    page_location: location.href,
+                    page_path: newValue,
+                    page_title: `${route.name?.toString()} | ${name}`
+                });
+                window._hmt?.push(["_trackPageview", newValue]);
+            }
+        }
+    );
+}
 
 const paneOpened = shallowRef(window.innerWidth >= 1008);
 const isCompactOverlay = shallowRef(window.innerWidth < 641);
@@ -187,8 +206,6 @@ onUnmounted(() => window.removeEventListener("resize", handleResize));
 }
 
 body {
-    font-family: "Segoe UI", sans-serif, "Segoe MDL2 Assets", "Symbols", "Segoe UI Emoji";
-    font-size: 15px;
     width: 100%;
     height: 100%;
     overflow: hidden;
