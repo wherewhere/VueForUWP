@@ -61,7 +61,12 @@
                             <option>List item</option>
                             <option>List item</option>
                         </select>
-                        <select class="win-dropdown" placeholder="Placeholder text" disabled></select>
+                        <select class="win-dropdown" placeholder="Placeholder text" disabled>
+                            <option>List item</option>
+                            <option>List item</option>
+                            <option>List item</option>
+                            <option>List item</option>
+                        </select>
                         <div>
                             <button class="win-button" ref="button" @click="openFlyout">Button with flyout</button>
                             <WinJSControl :control="Flyout" :options="{ anchor: button! }" ref="flyout">
@@ -160,6 +165,10 @@ function openFlyout() {
 .win-textbox,
 .win-slider {
     width: auto;
+}
+
+.win-dropdown {
+    max-width: none;
 }
 
 .stack-horizontal {
