@@ -48,10 +48,7 @@ onMounted(async () => {
 @use "../styles/utils";
 
 .root {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    padding: 20px 0 0 20px;
+    @include utils.root;
 
     .scroll-viewer {
         flex: 1;
