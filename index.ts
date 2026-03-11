@@ -51,6 +51,10 @@ accents.createAccentRule(
     ".nav-commands a.router-link-active.router-link-exact-active::before",
     [{ name: "background", value: accents.ColorTypes.accent }]
 );
+accents.createAccentRule(
+    ":root",
+    [{ name: "accent-color", value: accents.ColorTypes.accent }]
+);
 
 import "./helpers/pane";
 
