@@ -17,7 +17,7 @@ if (certificateFileIndex != -1) {
     }
 }
 
-const {msixPackage} = await packageMSIX({
+const { msixPackage } = await packageMSIX({
     appManifest: "AppxManifest.xml",
     appDir: "dist",
     packageAssets: "assets",
