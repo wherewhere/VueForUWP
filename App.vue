@@ -276,10 +276,10 @@ body {
                     left: 0;
                     top: 12px;
                 }
+            }
 
-                :deep(.win-splitviewcommand-icon) {
-                    margin-top: 16px;
-                }
+            :deep(.win-splitviewcommand) .win-splitviewcommand-icon {
+                margin-top: 16px;
             }
         }
     }
