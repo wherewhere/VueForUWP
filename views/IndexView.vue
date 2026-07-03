@@ -14,16 +14,21 @@
                     <span class="win-type-base">Checkbox</span>
                     <div class="stack-vertical row-gap-8">
                         <label class="stack-horizontal">
-                            <input class="win-checkbox" type="checkbox" /> Unchecked
+                            <input class="win-checkbox" type="checkbox" />
+                            Unchecked
                         </label>
                         <label class="stack-horizontal">
-                            <input class="win-checkbox" type="checkbox" checked /> Checked
+                            <input class="win-checkbox" type="checkbox" checked />
+                            Checked
                         </label>
                         <label class="stack-horizontal">
-                            <input class="win-checkbox" type="checkbox" indeterminate /> Third state
+                            <input class="win-checkbox" type="checkbox" :indeterminate="state === null"
+                                :checked="state !== false" @click="changeCheckboxState" />
+                            Third state
                         </label>
                         <label class="stack-horizontal">
-                            <input class="win-checkbox" type="checkbox" checked disabled /> Disabled
+                            <input class="win-checkbox" type="checkbox" checked disabled />
+                            Disabled
                         </label>
                     </div>
                 </div>
@@ -31,13 +36,16 @@
                     <span class="win-type-base">Radio button</span>
                     <div class="stack-vertical row-gap-8">
                         <label class="stack-horizontal">
-                            <input class="win-radio" type="radio" /> Unchecked
+                            <input class="win-radio" name="test-group" type="radio" />
+                            Unchecked
                         </label>
                         <label class="stack-horizontal">
-                            <input class="win-radio" type="radio" checked /> Checked
+                            <input class="win-radio" name="test-group" type="radio" checked />
+                            Checked
                         </label>
                         <label class="stack-horizontal">
-                            <input class="win-radio" type="radio" name="Disabled" checked disabled /> Disabled
+                            <input class="win-radio" name="Disabled" type="radio" checked disabled />
+                            Disabled
                         </label>
                     </div>
                 </div>
@@ -110,12 +118,27 @@
 
 <script lang="ts" setup>
 import "../types";
-import { useTemplateRef } from "vue";
+import { shallowRef, useTemplateRef } from "vue";
 import WinJSControl from "../components/WinJSControl.vue";
 
 const { DatePicker, Flyout, TimePicker, ToggleSwitch } = WinJS.UI;
 const button = useTemplateRef("button");
 const flyout = useTemplateRef("flyout");
+
+const state = shallowRef<boolean | null>(null);
+function changeCheckboxState() {
+    switch (state.value) {
+        case null:
+            state.value = false;
+            break;
+        case true:
+            state.value = null;
+            break;
+        case false:
+            state.value = true;
+            break;
+    }
+}
 
 function openFlyout() {
     flyout.value!.control!.show();

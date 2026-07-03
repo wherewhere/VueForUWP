@@ -29,6 +29,7 @@
     "url": "git+https://github.com/wherewhere/VueForUWP.git"
   },
   "devDependencies": {
+    "@types/node": "^26.0.0",
     "@types/winjs": "^4.0.0",
     "@types/winrt-uwp": "^0.0.29",
     "@vitejs/plugin-legacy": "^8.0.0",
@@ -46,8 +47,12 @@
     "@microsoft/clarity": "^1.0.0",
     "@unhead/vue": "^3.0.0",
     "bowser": "^2.0.0",
+    "mdl2-icons": "^1.0.0",
     "vue": "^3.0.0",
     "vue-router": "^5.0.0",
     "winjs": "^4.0.0"
+  },
+  "overrides": {
+    "js-yaml": "^4.0.0"
   }
 }

@@ -195,6 +195,7 @@ onUnmounted(() => window.removeEventListener("resize", handleResize));
 
 <style lang="scss">
 @use "winjs/css/ui-dark.css";
+@use "./styles/prefix.scss";
 
 .win-ui-light {
     color-scheme: light;
@@ -278,8 +279,15 @@ body {
                 }
             }
 
-            :deep(.win-splitviewcommand) .win-splitviewcommand-icon {
-                margin-top: 16px;
+            :deep(.win-splitviewcommand) {
+                .win-splitviewcommand-icon {
+                    margin-top: 16px;
+                }
+
+                .win-splitviewcommand-label {
+                    margin-bottom: 14px;
+                    margin-top: 14px;
+                }
             }
         }
     }
