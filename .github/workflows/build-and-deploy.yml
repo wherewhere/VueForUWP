@@ -32,7 +32,7 @@ jobs:
           Certificate: ${{ secrets.Base64_Encoded_Pfx }}
 
       - name: Use Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           # Examples: 20, 18.19, >=16.20.2, lts/Iron, lts/Hydrogen, *, latest, current, node
           # Ref: https://github.com/actions/setup-node#supported-version-syntax

@@ -31,7 +31,7 @@
         column-gap: #{$column-gap};
     }
 
-    @supports (display: masonry) or (display: grid-lanes) {
+    @supports (display: grid-lanes) or (display: masonry) {
         display: masonry;
         display: grid-lanes;
         grid-template-columns: repeat(auto-fill, minmax(#{$column-width}, 1fr));

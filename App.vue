@@ -197,6 +197,14 @@ onUnmounted(() => window.removeEventListener("resize", handleResize));
 @use "winjs/css/ui-dark.css";
 @use "./styles/prefix.scss";
 
+$base-transition: background-color 0.083s ease-in-out;
+
+.win-ui-light,
+.win-ui-dark,
+.win-splitview-pane {
+  transition: $base-transition;
+}
+
 .win-ui-light {
     color-scheme: light;
 }
