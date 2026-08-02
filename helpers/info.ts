@@ -19,11 +19,11 @@ if (isWindows) {
     version = `${_package.displayName} v${_package.id.version.major}.${_package.id.version.minor}.${_package.id.version.build}`;
 }
 else {
-    function toUpperCaseFirstLetter(str: string) {
-        return `${str.charAt(0).toUpperCase()}${str.slice(1)}`;
-    }
     const platform = parser.parsePlatform();
     if (platform.type) {
+        function toUpperCaseFirstLetter(str: string) {
+            return `${str.charAt(0).toUpperCase()}${str.slice(1)}`;
+        }
         device += ` ${toUpperCaseFirstLetter(platform.type)}`;
     }
     const os = parser.parseOS();

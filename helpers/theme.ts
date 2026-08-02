@@ -28,8 +28,7 @@ export function setTheme(newTheme: Theme) {
     }
 }
 
-import { isWindows } from "./utils";
-if (isWindows) {
+if (typeof Windows !== "undefined") {
     const settings = new Windows.UI.ViewManagement.UISettings();
 
     function isColorLight(color: Windows.UI.Color) {
