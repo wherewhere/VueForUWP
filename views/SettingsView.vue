@@ -96,11 +96,11 @@ import "../types";
 import { shallowRef, watch } from "vue";
 import { useSeoMeta } from "@unhead/vue";
 import { getTheme, setTheme, type Theme } from "../helpers/theme";
-import { name, version as code, bugs } from "../package.json";
+import { device, osVersion, version, userAgent, browser, engine, getName } from "../helpers/info";
+import { bugs } from "../package.json";
 import { version as winjsVersion } from "winjs/package.json";
 import { version as vueVersion } from "vue/package.json";
 import { isWindows, isSettingsPaneSupported, isApplicationViewViewModeSupported } from "../helpers/utils";
-import Bowser from "bowser";
 import SettingsGroup from "../components/SettingsGroup.vue";
 import Markdown from "../components/Markdown.vue";
 import About from "../About.md";
@@ -122,38 +122,6 @@ watch(theme, (newValue, oldValue) => {
         setTheme(newValue);
     }
 });
-
-const userAgent = navigator.userAgent;
-const parser = Bowser.getParser(userAgent, true);
-const browser = parser.parseBrowser();
-const engine = parser.parseEngine();
-const device = shallowRef("Browser");
-const osVersion = shallowRef("Unknown");
-const version = shallowRef(`${name} v${code}`);
-if (isWindows) {
-    const versionInfo = Windows.System.Profile.AnalyticsInfo.versionInfo;
-    device.value = versionInfo.deviceFamily.replace('.', ' ');
-    const deviceFamilyVersion = +versionInfo.deviceFamilyVersion;
-    osVersion.value = `Windows 10.${deviceFamilyVersion & 0x0000FFFF00000000}.${(deviceFamilyVersion & 0x00000000FFFF0000) >> 16}.${deviceFamilyVersion & 0x000000000000FFFF}`;
-    const _package = Windows.ApplicationModel.Package.current;
-    version.value = `${_package.displayName} v${_package.id.version.major}.${_package.id.version.minor}.${_package.id.version.build}`;
-}
-else {
-    function toUpperCaseFirstLetter(str: string) {
-        return `${str.charAt(0).toUpperCase()}${str.slice(1)}`;
-    }
-    const platform = parser.parsePlatform();
-    if (platform.type) {
-        device.value += ` ${toUpperCaseFirstLetter(platform.type)}`;
-    }
-    const os = parser.parseOS();
-    osVersion.value = getName(os);
-}
-
-function getName({ name, version }: Bowser.Parser.Details): string {
-    name = name || "Unknown";
-    return version ? `${name} ${version}` : name;
-}
 
 function exitPIP() {
     if (isApplicationViewViewModeSupported) {

@@ -5,6 +5,7 @@ import simpleHtmlPlugin from "vite-plugin-simple-html";
 import legacy from "@vitejs/plugin-legacy";
 import cssnano from "cssnano";
 import postcssPresetEnv from "postcss-preset-env";
+import getOutputOptions from "./helpers/output.mts";
 
 export default defineConfig({
     base: "./",
@@ -52,7 +53,8 @@ export default defineConfig({
         rolldownOptions: {
             checks: {
                 pluginTimings: false
-            }
+            },
+            output: getOutputOptions()
         }
     }
 });

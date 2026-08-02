@@ -1,3 +1,4 @@
+import "../types";
 import { isSettingsPaneSupported } from "./utils";
 import { homepage, bugs } from "../package.json";
 
