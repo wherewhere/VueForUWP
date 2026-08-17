@@ -183,6 +183,7 @@ table {
         overflow: auto;
         flex-direction: column;
         padding: 0 20px 48px 0;
+        container-type: inline-size;
 
         .masonry {
             @include utils.masonry(420px);
