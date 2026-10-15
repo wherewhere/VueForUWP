@@ -1,8 +1,5 @@
 import "./types";
 
-import { createHead } from "@unhead/vue/client";
-const head = createHead();
-
 import { isDarkTheme } from "./helpers/theme";
 function setThemeStyleSheet(isDark: boolean) {
     if (isDark) {
@@ -17,15 +14,11 @@ function setThemeStyleSheet(isDark: boolean) {
 addEventListener("theme-changed", x => setThemeStyleSheet((x as CustomEvent<boolean>).detail));
 setThemeStyleSheet(isDarkTheme());
 
-import { useScriptAsync } from "./helpers/unhead";
+import { head, useScriptAsync } from "./helpers/unhead";
 import baseJsUrl from "winjs/js/base.min.js?url";
-await useScriptAsync(head, {
-    src: baseJsUrl
-});
+await useScriptAsync(baseJsUrl);
 import uiJsUrl from "winjs/js/ui.min.js?url";
-await useScriptAsync(head, {
-    src: uiJsUrl
-});
+await useScriptAsync(uiJsUrl);
 
 const app = WinJS.Application;
 import { isWindows } from "./helpers/utils";

@@ -1,10 +1,12 @@
 import { useScript } from "unhead";
-import type { Unhead, UseScriptInput, UseScriptOptions } from "unhead/types";
+import { createHead } from "@unhead/vue/client";
 
-export function useScriptAsync<T extends Record<symbol | string, any> = Record<symbol | string, any>>(head: Unhead<any>, _input: UseScriptInput, _options?: UseScriptOptions<T>) {
+export const head = createHead();
+
+export function useScriptAsync<T extends Record<symbol | string, any> = Record<symbol | string, any>>(_input: Parameters<typeof useScript<T>>[1], _options?: Parameters<typeof useScript<T>>[2]) {
     const { onError, onLoaded } = useScript<T>(head, _input, _options);
-    return new Promise<void>((resolve, reject) => {
-        onLoaded(() => resolve());
-        onError((err) => reject(err));
+    return new Promise<T>((resolve, reject) => {
+        onLoaded(resolve);
+        onError(reject);
     });
 }

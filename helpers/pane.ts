@@ -1,4 +1,5 @@
 import "../types";
+import hotkeys from "hotkeys-js";
 import { isSettingsPaneSupported } from "./utils";
 import { homepage, bugs } from "../package.json";
 
@@ -17,5 +18,9 @@ if (isSettingsPaneSupported) {
                 "Repository",
                 () => Windows.System.Launcher.launchUriAsync(new Windows.Foundation.Uri(homepage))
             ));
+    });
+    hotkeys("ctrl+shift+x", event => {
+        event.preventDefault();
+        Windows.UI.ApplicationSettings.SettingsPane.show();
     });
 }
